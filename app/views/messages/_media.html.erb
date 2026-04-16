@@ -1,0 +1,33 @@
+<%# locals: (message:) -%>
+<div class="mb-1 max-w-[320px]">
+  <% if message.media_pending? %>
+    <div class="flex items-center gap-2 rounded-md bg-neutral-lightest px-3 py-4 min-w-[180px] text-[13px] text-neutral-medium">
+      <span class="wa-spinner" aria-hidden="true"></span>
+      <span class="capitalize">Downloading <%= message.message_type %>…</span>
+    </div>
+  <% elsif message.media_failed? %>
+    <div class="flex items-center gap-2 rounded-md bg-neutral-lightest px-3 py-4 min-w-[180px] text-[13px] text-error-medium">
+      Couldn't load <%= message.message_type %>
+    </div>
+  <% elsif message.media_downloaded? && message.media.attached? %>
+    <% case message.message_type %>
+    <% when "image", "sticker" %>
+      <%= link_to rails_blob_path(message.media, disposition: "inline"), target: "_blank", rel: "noopener" do %>
+        <%= image_tag rails_blob_path(message.media),
+                      class: message.message_type == "sticker" ?
+                               "block max-w-[130px] max-h-[130px]" :
+                               "block max-w-[320px] max-h-[320px] rounded-md" %>
+      <% end %>
+    <% when "audio" %>
+      <audio class="w-[260px] max-w-full" controls preload="metadata" src="<%= rails_blob_path(message.media) %>"></audio>
+    <% when "video" %>
+      <video class="block max-w-[320px] max-h-[320px] rounded-md" controls preload="metadata" src="<%= rails_blob_path(message.media) %>"></video>
+    <% when "document" %>
+      <%= link_to rails_blob_path(message.media, disposition: "attachment"),
+                  class: "flex items-center gap-2.5 rounded-md bg-neutral-lightest/60 px-3 py-2.5 min-w-[220px] text-neutral-darkest no-underline" do %>
+        <span class="text-lg">📎</span>
+        <span class="break-all"><%= message.media.filename %></span>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

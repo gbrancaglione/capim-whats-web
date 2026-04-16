@@ -1,0 +1,44 @@
+<% content_for :title, "Contato — #{@contact.display_name}" %>
+
+<div class="ms-page">
+  <div class="ms-page__body max-w-[860px]">
+    <%= render "shared/page_header",
+               title: @contact.display_name.presence || "Contato sem nome",
+               back_path: conversations_path,
+               back_label: "Conversas" %>
+
+    <section class="ms-card ms-card--pad flex items-start gap-4">
+      <div class="flex h-16 w-16 flex-none items-center justify-center rounded-full bg-gradient-to-br from-brand-primary-light to-brand-primary text-2xl font-semibold uppercase text-white">
+        <%= @contact.display_initial %>
+      </div>
+      <dl class="m-0 grid flex-1 grid-cols-[140px_1fr] gap-x-4 gap-y-2 text-sm">
+        <dt class="font-medium text-neutral-medium">Nome</dt>
+        <dd class="m-0 text-neutral-darkest"><%= @contact.name.presence || "—" %></dd>
+
+        <dt class="font-medium text-neutral-medium">Telefone</dt>
+        <dd class="m-0 text-neutral-darkest">
+          <% if @contact.phone_number.present? %>
+            <code class="font-mono text-[13px]"><%= @contact.phone_number %></code>
+          <% else %>
+            —
+          <% end %>
+        </dd>
+
+        <% if @contact.user_id? %>
+          <dt class="font-medium text-neutral-medium">BSUID</dt>
+          <dd class="m-0 text-neutral-darkest"><code class="font-mono text-[13px]"><%= @contact.user_id %></code></dd>
+        <% end %>
+
+        <dt class="font-medium text-neutral-medium">Conversa</dt>
+        <dd class="m-0">
+          <% if @contact.conversation? %>
+            <%= link_to "Abrir thread", conversation_path(@contact.conversation_id),
+                        class: "font-medium text-brand-primary no-underline hover:underline" %>
+          <% else %>
+            <span class="ms-badge ms-badge--neutral">Lead — sem conversa</span>
+          <% end %>
+        </dd>
+      </dl>
+    </section>
+  </div>
+</div>

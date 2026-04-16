@@ -1,0 +1,19 @@
+<%# locals: (message:) -%>
+<li id="<%= dom_id(message) %>"
+    class="wa-message wa-message--<%= message.direction %> wa-message--<%= message.status %> flex <%= message.outbound? ? 'justify-end' : 'justify-start' %>">
+  <div class="wa-message__bubble relative max-w-[65%] break-words rounded-lg py-1.5 pl-3 pr-2 shadow-level-1
+              <%= message.outbound? ? 'bg-brand-secondary-lightest' : 'bg-white' %>">
+    <% if message.media? %>
+      <%= render "messages/media", message: message %>
+    <% end %>
+    <% if message.body.present? %>
+      <div class="wa-message__body whitespace-pre-wrap break-words pr-[60px] text-[14.2px] leading-5 text-neutral-darkest"><%= message.body.to_s %></div>
+    <% end %>
+    <div class="pointer-events-none absolute bottom-1 right-2 flex items-center gap-1 text-[11px] text-neutral-medium">
+      <time><%= message.created_at.strftime("%H:%M") %></time>
+      <% if message.outbound? %>
+        <span class="inline-flex items-center"><%= message_status_icon(message) %></span>
+      <% end %>
+    </div>
+  </div>
+</li>

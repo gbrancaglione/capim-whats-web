@@ -1,0 +1,51 @@
+<% content_for :title, "Conversas" %>
+
+<div class="flex h-full min-h-0 flex-1">
+  <aside class="wa-sidebar flex w-[340px] flex-none flex-col overflow-hidden border-r border-neutral-lightest bg-white">
+    <header class="flex items-center justify-between border-b border-neutral-lightest px-5 py-4">
+      <div>
+        <h1 class="m-0 font-heading text-lg font-bold text-neutral-darkest">Conversas</h1>
+        <p class="m-0 text-xs text-neutral-medium">
+          <%= @conversations.size %> ativa<%= "s" unless @conversations.size == 1 %>
+        </p>
+      </div>
+      <button type="button"
+              class="inline-flex h-9 w-9 items-center justify-center rounded-full text-neutral-medium transition hover:bg-neutral-lightest hover:text-brand-primary"
+              aria-label="Nova conversa" title="Nova conversa">
+        <svg viewBox="0 0 24 24" class="h-5 w-5"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </header>
+
+    <div class="border-b border-neutral-lightest px-4 py-3">
+      <div class="flex items-center gap-2.5 rounded-full bg-neutral-background px-4 py-2">
+        <svg viewBox="0 0 24 24" class="h-4 w-4 flex-none text-neutral-medium"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="search" placeholder="Buscar conversa"
+               class="flex-1 border-0 bg-transparent text-sm text-neutral-darkest outline-none placeholder:text-neutral-medium" disabled>
+      </div>
+    </div>
+
+    <%= turbo_stream_from "conversations" %>
+
+    <ul id="conversations_list" class="wa-scroll m-0 flex-1 list-none overflow-y-auto p-0">
+      <% @conversations.each do |row| %>
+        <%= render "conversations/conversation_row",
+                   row: row,
+                   selected: @selected_conversation && @selected_conversation.id == row.id %>
+      <% end %>
+    </ul>
+  </aside>
+
+  <section class="wa-thread flex min-w-0 flex-1 flex-col overflow-hidden">
+    <% if @selected_conversation %>
+      <%= render "conversations/thread", thread: @selected_conversation, messages: @messages %>
+    <% else %>
+      <div class="flex flex-1 flex-col items-center justify-center gap-3 text-neutral-medium">
+        <div class="flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-level-1">
+          <svg viewBox="0 0 24 24" class="h-10 w-10 text-brand-primary"><path d="M4 20l1.5-4.2A8 8 0 1 1 8.2 18.5L4 20z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h2 class="m-0 font-heading text-2xl font-bold text-neutral-dark">WhatsApp</h2>
+        <p class="m-0 text-sm">Selecione uma conversa para começar.</p>
+      </div>
+    <% end %>
+  </section>
+</div>

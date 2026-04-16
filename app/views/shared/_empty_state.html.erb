@@ -1,0 +1,8 @@
+<%# locals: (title:, description: nil) -%>
+<div class="ms-empty flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-neutral-lightest bg-white px-6 py-12 text-center">
+  <svg viewBox="0 0 24 24" class="h-10 w-10 text-neutral-light"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 12h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+  <p class="m-0 text-base font-medium text-neutral-dark"><%= title %></p>
+  <% if local_assigns[:description] %>
+    <p class="m-0 text-sm text-neutral-medium"><%= description %></p>
+  <% end %>
+</div>

@@ -1,0 +1,213 @@
+@import "tailwindcss";
+
+/*
+ * Capim DS design tokens — mirrored from ~/capim-ds/tokens/foundation.tokens.json.
+ * Exposed to Tailwind v4 via @theme so utilities like bg-brand-primary,
+ * text-neutral-medium, shadow-level-2, rounded-md become available.
+ */
+@theme {
+  --font-heading: "Red Hat Display", "Red Hat Display Fallback", system-ui, sans-serif;
+  --font-text:    "Roboto", "Roboto Fallback", system-ui, sans-serif;
+  --font-sans:    "Roboto", "Roboto Fallback", system-ui, sans-serif;
+
+  --color-brand-primary:          #59399E;
+  --color-brand-primary-lightest: #EEECFB;
+  --color-brand-primary-light:    #AB9DE8;
+  --color-brand-primary-dark:     #3A2666;
+  --color-brand-primary-darkest:  #221540;
+
+  --color-brand-secondary:          #A6CD15;
+  --color-brand-secondary-lightest: #F5FCCB;
+  --color-brand-secondary-light:    #D9F363;
+  --color-brand-secondary-dark:     #50660C;
+  --color-brand-secondary-darkest:  #33400F;
+
+  --color-neutral-white:      #FFFFFF;
+  --color-neutral-background: #F5F5FA;
+  --color-neutral-lightest:   #E9E9F2;
+  --color-neutral-light:      #BBB8CC;
+  --color-neutral-medium:     #79778C;
+  --color-neutral-dark:       #444152;
+  --color-neutral-darkest:    #201F26;
+
+  --color-success-light:  #EDFDF1;
+  --color-success-medium: #268041;
+  --color-success-dark:   #175028;
+  --color-error-light:    #FDE3E3;
+  --color-error-medium:   #E94A4A;
+  --color-error-dark:     #7C2020;
+  --color-warning-light:  #FDF6C8;
+  --color-warning-medium: #F1AF0F;
+  --color-warning-dark:   #763D11;
+  --color-info-light:     #D5F7F8;
+  --color-info-medium:    #3DE4F5;
+  --color-info-dark:      #1A3D47;
+
+  --radius-none: 0px;
+  --radius-tiny: 2px;
+  --radius-sm:   8px;
+  --radius-md:   16px;
+  --radius-lg:   24px;
+  --radius-hg:   56px;
+
+  --shadow-level-1: 0 1px 4px 0 rgba(145, 144, 160, 0.08);
+  --shadow-level-2: 0 4px 12px 0 rgba(145, 144, 160, 0.08);
+  --shadow-level-3: 0 8px 32px 0 rgba(32, 31, 38, 0.20);
+
+  --text-display: 112px;
+  --text-h1:      72px;
+  --text-h2:      56px;
+  --text-h3:      40px;
+  --text-h4:      32px;
+  --text-sub1:    24px;
+  --text-sub2:    18px;
+  --text-body1:   16px;
+  --text-body2:   14px;
+  --text-cap1:    12px;
+  --text-cap2:    10px;
+}
+
+/* Global document defaults so every screen inherits the Capim palette/type. */
+@layer base {
+  html, body {
+    background: var(--color-neutral-background);
+    color:      var(--color-neutral-darkest);
+    font-family: var(--font-text);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 { font-family: var(--font-heading); }
+}
+
+/*
+ * Component-level rules that would be awkward as utility soup:
+ * chat wallpaper, bubble tail corners, status ticks, scrollbars, spinner.
+ * Everything else stays as plain Tailwind classes in the ERB.
+ */
+@layer components {
+  .wa-thread {
+    background:
+      linear-gradient(rgba(238, 236, 251, 0.94), rgba(238, 236, 251, 0.94)),
+      radial-gradient(circle at 25% 25%, rgba(89, 57, 158, 0.06) 1px, transparent 1.5px),
+      radial-gradient(circle at 75% 75%, rgba(89, 57, 158, 0.06) 1px, transparent 1.5px),
+      var(--color-brand-primary-lightest);
+    background-size: auto, 28px 28px, 28px 28px, auto;
+  }
+
+  /* Bubble tails — one flat corner toward the avatar side. */
+  .wa-message--inbound  .wa-message__bubble { border-top-left-radius: 0; }
+  .wa-message--outbound .wa-message__bubble { border-top-right-radius: 0; }
+  .wa-message--failed   .wa-message__bubble {
+    box-shadow: 0 0 0 1px var(--color-error-medium), var(--shadow-level-1);
+  }
+
+  .wa-tick          { width: 16px; height: 11px; color: var(--color-neutral-medium); }
+  .wa-tick--double  { width: 18px; }
+  .wa-tick--failed  { color: var(--color-error-medium); width: 14px; height: 14px; }
+  .wa-message--read .wa-tick { color: var(--color-brand-secondary-dark); }
+
+  /* Custom scrollbars — subtle, matches the neutral palette. */
+  .wa-scroll::-webkit-scrollbar       { width: 8px; }
+  .wa-scroll::-webkit-scrollbar-thumb { background: rgba(32, 31, 38, 0.15); border-radius: 4px; }
+
+  .wa-spinner {
+    width: 16px;
+    height: 16px;
+    border-radius: 9999px;
+    border: 2px solid rgba(32, 31, 38, 0.15);
+    border-top-color: var(--color-brand-primary);
+    animation: wa-spin 0.9s linear infinite;
+  }
+  @keyframes wa-spin { to { transform: rotate(360deg); } }
+
+  /* Design-system primitives used across pages. */
+
+  .ms-page {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 28px 32px 40px;
+  }
+  .ms-page__body { display: flex; flex-direction: column; gap: 24px; max-width: 1200px; margin: 0 auto; }
+
+  /* Card — neutral surface for grouped content. */
+  .ms-card {
+    background: var(--color-neutral-white);
+    border: 1px solid var(--color-neutral-lightest);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-level-1);
+  }
+  .ms-card--flush  { padding: 0; }
+  .ms-card--pad    { padding: 20px 24px; }
+
+  /* Input + button primitives. */
+  .ms-input {
+    height: 38px;
+    padding: 0 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-neutral-lightest);
+    background: var(--color-neutral-white);
+    font-size: 14px;
+    color: var(--color-neutral-darkest);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .ms-input:focus {
+    outline: none;
+    border-color: var(--color-brand-primary);
+    box-shadow: 0 0 0 3px rgba(89, 57, 158, 0.12);
+  }
+  .ms-input::placeholder { color: var(--color-neutral-light); }
+
+  .ms-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 38px;
+    padding: 0 18px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .ms-btn--primary   { background: var(--color-brand-primary); color: #fff; }
+  .ms-btn--primary:hover { background: var(--color-brand-primary-dark); }
+  .ms-btn--ghost     { background: transparent; color: var(--color-neutral-medium); border-color: var(--color-neutral-lightest); }
+  .ms-btn--ghost:hover { background: var(--color-neutral-lightest); color: var(--color-neutral-darkest); }
+  .ms-btn--danger    { background: #fff; color: var(--color-error-medium); border-color: var(--color-error-medium); }
+  .ms-btn--danger:hover { background: var(--color-error-light); }
+
+  /* Status/semantic badges. */
+  .ms-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+  .ms-badge--neutral { background: var(--color-neutral-lightest); color: var(--color-neutral-medium); }
+  .ms-badge--info    { background: var(--color-info-light);      color: var(--color-info-dark); }
+  .ms-badge--success { background: var(--color-success-light);   color: var(--color-success-medium); }
+  .ms-badge--warning { background: var(--color-warning-light);   color: var(--color-warning-dark); }
+  .ms-badge--danger  { background: var(--color-error-light);     color: var(--color-error-dark); }
+  .ms-badge--brand   { background: var(--color-brand-primary-lightest); color: var(--color-brand-primary-dark); }
+
+  /* Filter chip row shared by list pages. */
+  .ms-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    background: var(--color-neutral-white);
+    border: 1px solid var(--color-neutral-lightest);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+  }
+}

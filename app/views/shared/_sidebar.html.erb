@@ -1,0 +1,45 @@
+<%
+  viewing_contact = controller_name == "contacts"
+
+  nav_items = [
+    {
+      key:    :conversations,
+      label:  "Conversas",
+      path:   conversations_path,
+      active: controller_name.in?(%w[conversations messages conversation_reads]) || viewing_contact,
+      icon:   '<path d="M4 20l1.5-4.2A8 8 0 1 1 8.2 18.5L4 20z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'.html_safe
+    }
+  ]
+%>
+
+<aside class="flex h-full w-[72px] flex-none flex-col items-center bg-brand-primary-darkest text-white">
+  <div class="flex h-16 w-full items-center justify-center border-b border-white/5">
+    <%= link_to root_path, class: "flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-brand-primary-light to-brand-primary font-heading text-lg font-black text-white no-underline", "aria-label": "WhatsApp" do %>
+      W
+    <% end %>
+  </div>
+
+  <nav class="flex flex-1 flex-col items-center gap-1 py-4">
+    <% nav_items.each do |item| %>
+      <%= link_to item[:path],
+                  class: "group relative flex h-12 w-12 items-center justify-center rounded-xl no-underline transition #{item[:active] ? 'bg-white/15 text-white' : 'text-white/55 hover:bg-white/10 hover:text-white'}",
+                  "aria-label": item[:label],
+                  title: item[:label],
+                  data: { nav: item[:key], active: item[:active] } do %>
+        <% if item[:active] %>
+          <span class="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-r-full bg-brand-secondary"></span>
+        <% end %>
+        <svg viewBox="0 0 24 24" class="h-5 w-5"><%= item[:icon] %></svg>
+        <span class="pointer-events-none absolute left-[calc(100%+12px)] z-40 hidden whitespace-nowrap rounded-md bg-neutral-darkest px-2.5 py-1.5 text-xs font-medium text-white shadow-level-2 group-hover:block">
+          <%= item[:label] %>
+        </span>
+      <% end %>
+    <% end %>
+  </nav>
+
+  <div class="flex w-full flex-col items-center gap-2 border-t border-white/5 py-4">
+    <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-brand-secondary to-brand-secondary-dark font-semibold text-brand-secondary-darkest" title="Conta">
+      <%= current_user_initial %>
+    </div>
+  </div>
+</aside>

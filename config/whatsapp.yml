@@ -1,0 +1,21 @@
+default: &default
+  api_version: <%= ENV.fetch("WHATSAPP_API_VERSION", "v21.0") %>
+  phone_number_id: <%= ENV.fetch("WHATSAPP_PHONE_NUMBER_ID", "") %>
+  business_account_id: <%= ENV.fetch("WHATSAPP_BUSINESS_ACCOUNT_ID", "") %>
+  api_base_url: "https://graph.facebook.com"
+  media:
+    # Hard ceiling matching WhatsApp's own 100 MB limit for video/document.
+    max_file_size_bytes: 100000000
+    # Second-hop (CDN) timeout for large videos.
+    download_timeout_seconds: 60
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+  phone_number_id: "test_phone_number_id"
+  business_account_id: "test_business_account_id"
+
+production:
+  <<: *default
