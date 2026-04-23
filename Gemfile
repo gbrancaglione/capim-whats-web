@@ -70,5 +70,5 @@ gem "aws-sdk-s3", "~> 1.219"
 
 gem "webmock", "~> 3.26", group: :test
 gem "vcr", "~> 6.4", group: :test
-gem "faker", "~> 3.7", group: :test
+gem "faker", "~> 3.8", group: :test
 gem "factory_bot_rails", "~> 6.5", group: :test
