@@ -66,7 +66,7 @@ gem "stimulus-rails", "~> 1.3"
 
 gem "faraday", "~> 2.14"
 gem "dotenv-rails", "~> 3.2"
-gem "aws-sdk-s3", "~> 1.219"
+gem "aws-sdk-s3", "~> 1.220"
 
 gem "webmock", "~> 3.26", group: :test
 gem "vcr", "~> 6.4", group: :test
